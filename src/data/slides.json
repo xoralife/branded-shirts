@@ -1,0 +1,13 @@
+[
+  {
+    "title": "new",
+    "subtitle": "New Slide",
+    "description": "",
+    "cta": "Shop Now",
+    "link": "/shirts",
+    "image": "/uploads/slide-1782383087998.png",
+    "gradient": "from-[#1E3A5F] via-[#1E3A5F] to-[#2A4F7F]",
+    "active": true,
+    "id": 4
+  }
+]

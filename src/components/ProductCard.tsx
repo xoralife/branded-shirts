@@ -42,17 +42,21 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     >
       <div className="relative aspect-[4/5] bg-gray-100 overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className={`w-full h-full flex items-center justify-center ${
-              product.category === "shirts"
-                ? "bg-gradient-to-br from-blue-50 to-gray-100"
-                : "bg-gradient-to-br from-gray-50 to-gray-200"
-            }`}
-          >
-            <span className="text-6xl font-bold text-[#1E3A5F]/10 select-none">
-              {product.category === "shirts" ? "👔" : "👖"}
-            </span>
-          </div>
+          {product.image && (product.image.startsWith("/upload") || product.image.startsWith("/uploads")) ? (
+            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          ) : (
+            <div
+              className={`w-full h-full flex items-center justify-center ${
+                product.category === "shirts"
+                  ? "bg-gradient-to-br from-blue-50 to-gray-100"
+                  : "bg-gradient-to-br from-gray-50 to-gray-200"
+              }`}
+            >
+              <span className="text-6xl font-bold text-[#1E3A5F]/10 select-none">
+                {product.category === "shirts" ? "👔" : "👖"}
+              </span>
+            </div>
+          )}
         </div>
 
         {product.badge && (

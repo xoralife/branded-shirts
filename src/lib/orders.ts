@@ -67,6 +67,18 @@ export function updateOrderStatus(id: number, status: string): Order | null {
   return orders[idx];
 }
 
+let nextId = 5;
+
+export function addOrder(order: Omit<Order, "id" | "date">): Order {
+  const newOrder: Order = {
+    ...order,
+    id: nextId++,
+    date: new Date().toISOString().split("T")[0],
+  };
+  orders.unshift(newOrder);
+  return newOrder;
+}
+
 export function getOrderStats() {
   return {
     total: orders.length,

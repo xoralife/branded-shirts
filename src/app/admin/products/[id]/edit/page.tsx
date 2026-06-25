@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Upload, X } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/components/Toast";
 
 const defaultSizes = ["S", "M", "L", "XL", "XXL"];
 
@@ -12,8 +13,11 @@ export default function EditProduct() {
   const router = useRouter();
   const params = useParams();
   const id = Number(params.id);
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
     category: "shirts" as "shirts" | "trousers",
@@ -22,6 +26,7 @@ export default function EditProduct() {
     description: "",
     sizes: [] as string[],
     badge: "",
+    image: null as string | null,
   });
 
   useEffect(() => {
@@ -36,6 +41,7 @@ export default function EditProduct() {
           description: p.description,
           sizes: p.sizes,
           badge: p.badge || "",
+          image: p.image || null,
         });
         setLoading(false);
       });
@@ -50,6 +56,27 @@ export default function EditProduct() {
     }));
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      showToast("Please select an image file", "error");
+      return;
+    }
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: formData });
+    const data = await res.json();
+    if (res.ok) {
+      setForm({ ...form, image: data.url });
+      showToast("Image uploaded", "success");
+    } else {
+      showToast("Upload failed", "error");
+    }
+    setUploading(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -60,17 +87,23 @@ export default function EditProduct() {
       price: Number(form.price),
       originalPrice: form.originalPrice ? Number(form.originalPrice) : null,
       description: form.description,
+      image: form.image,
       sizes: form.sizes,
       badge: form.badge || null,
     };
 
-    await fetch(`/api/products/${id}`, {
+    const res = await fetch(`/api/products/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
 
-    router.push("/admin/products");
+    if (res.ok) {
+      showToast("Product updated", "success");
+      router.push("/admin/products");
+    } else {
+      showToast("Failed to update product", "error");
+    }
     setSaving(false);
   };
 
@@ -78,51 +111,25 @@ export default function EditProduct() {
 
   return (
     <div className="max-w-2xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
-        <Link
-          href="/admin/products"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#1E3A5F] transition-colors mb-4"
-        >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <Link href="/admin/products" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#1E3A5F] transition-colors mb-4">
           <ArrowLeft size={16} /> Back to Products
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Edit Product</h1>
       </motion.div>
 
-      <motion.form
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        onSubmit={handleSubmit}
-        className="bg-white rounded-xl border border-gray-100 p-6 space-y-5"
-      >
+      <motion.form initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+        onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-100 p-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Product Name
-            </label>
-            <input
-              type="text"
-              required
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Product Name</label>
+            <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Category
-            </label>
-            <select
-              value={form.category}
-              onChange={(e) =>
-                setForm({ ...form, category: e.target.value as "shirts" | "trousers" })
-              }
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]"
-            >
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as "shirts" | "trousers" })}
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]">
               <option value="shirts">Shirts</option>
               <option value="trousers">Trousers</option>
             </select>
@@ -131,54 +138,49 @@ export default function EditProduct() {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Price (PKR)
-            </label>
-            <input
-              type="number"
-              required
-              min={0}
-              value={form.price}
-              onChange={(e) => setForm({ ...form, price: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Price (PKR)</label>
+            <input type="number" required min={0} value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })}
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Original Price (optional)
-            </label>
-            <input
-              type="number"
-              min={0}
-              value={form.originalPrice}
-              onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Original Price (optional)</label>
+            <input type="number" min={0} value={form.originalPrice} onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]" />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Description
-          </label>
-          <textarea
-            required
-            rows={3}
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F] resize-none"
-          />
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+          <textarea required rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F] resize-none" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Badge (optional)
-          </label>
-          <select
-            value={form.badge}
-            onChange={(e) => setForm({ ...form, badge: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]"
-          >
+          <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+          {form.image && form.image.startsWith("/upload") ? (
+            <div className="relative w-full h-48 rounded-xl overflow-hidden border border-gray-200 mb-3">
+              <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
+              <button type="button" onClick={() => setForm({ ...form, image: null })}
+                className="absolute top-2 right-2 w-8 h-8 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors">
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            <div onClick={() => fileInputRef.current?.click()}
+              className="w-full h-32 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#1E3A5F]/40 hover:bg-gray-50 transition-colors">
+              <Upload size={24} className="text-gray-300 mb-2" />
+              <p className="text-sm text-gray-400">{form.image ? "Replace image" : "Click to upload product image"}</p>
+              <p className="text-xs text-gray-300 mt-1">PNG, JPG, WebP (max 5MB)</p>
+            </div>
+          )}
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
+          {uploading && <p className="text-xs text-[#1E3A5F] mt-2">Uploading...</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Badge (optional)</label>
+          <select value={form.badge} onChange={(e) => setForm({ ...form, badge: e.target.value })}
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]">
             <option value="">None</option>
             <option value="New">New</option>
             <option value="Sale">Sale</option>
@@ -186,32 +188,19 @@ export default function EditProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Available Sizes
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Available Sizes</label>
           <div className="flex flex-wrap gap-2">
             {defaultSizes.map((size) => (
-              <button
-                key={size}
-                type="button"
-                onClick={() => toggleSize(size)}
-                className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                  form.sizes.includes(size)
-                    ? "border-[#1E3A5F] bg-[#1E3A5F] text-white"
-                    : "border-gray-200 text-gray-600 hover:border-gray-300"
-                }`}
-              >
+              <button key={size} type="button" onClick={() => toggleSize(size)}
+                className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${form.sizes.includes(size) ? "border-[#1E3A5F] bg-[#1E3A5F] text-white" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
                 {size}
               </button>
             ))}
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={saving}
-          className="w-full py-3 bg-[#1E3A5F] text-white font-semibold rounded-xl hover:bg-[#162D4A] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-        >
+        <button type="submit" disabled={saving || uploading}
+          className="w-full py-3 bg-[#1E3A5F] text-white font-semibold rounded-xl hover:bg-[#162D4A] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
           <Save size={18} />
           {saving ? "Saving..." : "Update Product"}
         </button>

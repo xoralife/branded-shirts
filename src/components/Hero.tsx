@@ -4,44 +4,41 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
-const slides = [
-  {
-    title: "Premium Collection",
-    subtitle: "Shirts & Trousers",
-    description: "Elevate your style with our premium branded collection",
-    cta: "Shop Now",
-    link: "/shirts",
-    gradient: "from-[#1E3A5F] via-[#1E3A5F] to-[#2A4F7F]",
-  },
-  {
-    title: "New Arrivals",
-    subtitle: "Summer Collection 2026",
-    description: "Discover the latest trends in men's fashion",
-    cta: "Explore",
-    link: "/trousers",
-    gradient: "from-[#1E3A5F] via-[#162D4A] to-[#1E3A5F]",
-  },
-  {
-    title: "Premium Quality",
-    subtitle: "Crafted for Perfection",
-    description: "Experience unmatched comfort and style",
-    cta: "View Collection",
-    link: "#categories",
-    gradient: "from-[#0F2440] via-[#1E3A5F] to-[#1E3A5F]",
-  },
-];
+interface Slide {
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  cta: string;
+  link: string;
+  image: string | null;
+  gradient: string;
+  active: boolean;
+}
 
 export default function Hero() {
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/slides")
+      .then((r) => r.json())
+      .then((data: Slide[]) => setSlides(data.filter((s) => s.active)));
+  }, []);
 
   const next = useCallback(() => {
     setCurrent((prev) => (prev + 1) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   useEffect(() => {
+    if (slides.length === 0) return;
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, slides.length]);
+
+  if (slides.length === 0) return null;
+
+  const slide = slides[current];
 
   return (
     <section className="relative h-[70vh] sm:h-[80vh] lg:h-[85vh] min-h-[420px] sm:min-h-[500px] max-h-[800px] overflow-hidden">
@@ -52,11 +49,17 @@ export default function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
-          className={`absolute inset-0 bg-gradient-to-br ${slides[current].gradient}`}
-        />
+          className="absolute inset-0"
+        >
+          {slide.image ? (
+            <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+          ) : (
+            <div className={`w-full h-full bg-gradient-to-br ${slide.gradient}`} />
+          )}
+        </motion.div>
       </AnimatePresence>
 
-      <div className="absolute inset-0 bg-black/10" />
+      <div className="absolute inset-0 bg-black/30" />
 
       <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
         <AnimatePresence mode="wait">
@@ -69,20 +72,20 @@ export default function Hero() {
             className="max-w-2xl"
           >
             <span className="inline-block text-white/80 text-sm font-medium tracking-[0.2em] uppercase mb-4">
-              {slides[current].subtitle}
+              {slide.subtitle}
             </span>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-              {slides[current].title}
+              {slide.title}
             </h1>
             <p className="text-lg sm:text-xl text-white/80 mb-8 max-w-lg">
-              {slides[current].description}
+              {slide.description}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href={slides[current].link}
+                href={slide.link}
                 className="inline-flex items-center justify-center px-8 py-3 bg-white text-[#1E3A5F] font-semibold rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
-                {slides[current].cta}
+                {slide.cta}
               </Link>
               <Link
                 href="#categories"
@@ -101,9 +104,7 @@ export default function Hero() {
             key={i}
             onClick={() => setCurrent(i)}
             className={`h-2 rounded-full transition-all duration-300 ${
-              i === current
-                ? "w-8 bg-white"
-                : "w-2 bg-white/40 hover:bg-white/60"
+              i === current ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/60"
             }`}
           />
         ))}

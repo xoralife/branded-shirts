@@ -13,6 +13,7 @@ interface Product {
   category: string;
   price: number;
   badge: string | null;
+  image: string | null;
 }
 
 export default function AdminProducts() {
@@ -136,9 +137,13 @@ export default function AdminProducts() {
                       >
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-sm flex-shrink-0">
-                              {p.category === "shirts" ? "👔" : "👖"}
-                            </div>
+                            {p.image && (p.image.startsWith("/upload") || p.image.startsWith("/uploads")) ? (
+                              <img src={p.image} alt={p.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+                            ) : (
+                              <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-sm flex-shrink-0">
+                                {p.category === "shirts" ? "👔" : "👖"}
+                              </div>
+                            )}
                             <span className="font-medium text-gray-900 whitespace-nowrap">{p.name}</span>
                           </div>
                         </td>
@@ -178,9 +183,13 @@ export default function AdminProducts() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-lg">
-                        {p.category === "shirts" ? "👔" : "👖"}
-                      </div>
+                      {p.image && (p.image.startsWith("/upload") || p.image.startsWith("/uploads")) ? (
+                        <img src={p.image} alt={p.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-lg">
+                          {p.category === "shirts" ? "👔" : "👖"}
+                        </div>
+                      )}
                       <div>
                         <p className="font-medium text-gray-900 text-sm">{p.name}</p>
                         <p className="text-xs text-gray-400 capitalize">{p.category}</p>

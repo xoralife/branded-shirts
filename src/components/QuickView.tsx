@@ -59,8 +59,12 @@ export default function QuickView({ product, onClose }: QuickViewProps) {
             </button>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              <div className="aspect-[3/4] rounded-xl bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center">
-                <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
+              <div className="aspect-[3/4] rounded-xl bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
+                {product.image && (product.image.startsWith("/upload") || product.image.startsWith("/uploads")) ? (
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
+                )}
               </div>
 
               <div>
