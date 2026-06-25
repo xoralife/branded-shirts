@@ -71,15 +71,15 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
         <button
           onClick={() => setQuickViewProduct(product)}
-          className="absolute bottom-3 right-16 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gray-100"
+          className="absolute bottom-3 right-16 w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-full shadow-md flex items-center justify-center sm:opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gray-100"
         >
-          <Eye size={18} />
+          <Eye size={16} />
         </button>
         <button
           onClick={handleAddToCart}
-          className="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#1E3A5F] hover:text-white"
+          className="absolute bottom-3 right-3 w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-full shadow-md flex items-center justify-center sm:opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#1E3A5F] hover:text-white"
         >
-          <ShoppingBag size={18} />
+          <ShoppingBag size={16} />
         </button>
       </div>
 

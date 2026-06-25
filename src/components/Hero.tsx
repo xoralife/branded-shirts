@@ -71,7 +71,7 @@ export default function Hero() {
             <span className="inline-block text-white/80 text-sm font-medium tracking-[0.2em] uppercase mb-4">
               {slides[current].subtitle}
             </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
               {slides[current].title}
             </h1>
             <p className="text-lg sm:text-xl text-white/80 mb-8 max-w-lg">
