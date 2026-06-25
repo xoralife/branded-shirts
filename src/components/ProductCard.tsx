@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, Eye } from "lucide-react";
+import { ShoppingBag, Eye, Heart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import QuickView from "./QuickView";
 
 interface ProductCardProps {
@@ -24,7 +25,14 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, index }: ProductCardProps) {
   const { addItem, setIsOpen } = useCart();
+  const { addItem: addWish, removeItem: removeWish, isWishlisted } = useWishlist();
   const [selectedSize, setSelectedSize] = useState(product.sizes[1] || product.sizes[0]);
+  const wished = isWishlisted(product.id);
+
+  const toggleWish = () => {
+    if (wished) removeWish(product.id);
+    else addWish(product);
+  };
   const [quickViewProduct, setQuickViewProduct] = useState<typeof product | null>(null);
 
   const handleAddToCart = () => {
@@ -59,6 +67,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             </div>
           )}
         </div>
+
+        <button onClick={toggleWish}
+          className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-sm">
+          <Heart size={15} className={wished ? "fill-red-500 text-red-500" : "text-gray-400"} />
+        </button>
 
         {product.badge && (
           <span

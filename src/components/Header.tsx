@@ -4,8 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingBag, Heart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import SearchBar from "./SearchBar";
 
 const navLinks = [
@@ -20,6 +21,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { totalItems, setIsOpen: setCartOpen } = useCart();
+  const { totalItems: wishlistCount } = useWishlist();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
@@ -58,6 +60,17 @@ export default function Header() {
             <div className="hidden sm:block">
               <SearchBar />
             </div>
+            <Link
+              href="/wishlist"
+              className="relative p-2 text-gray-600 hover:text-[#1E3A5F] transition-colors"
+            >
+              <Heart size={22} />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
             <button
               onClick={() => setCartOpen(true)}
               className="relative p-2 text-gray-600 hover:text-[#1E3A5F] transition-colors"
@@ -100,6 +113,10 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+            <Link href="/wishlist" onClick={() => setIsOpen(false)}
+              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#1E3A5F] hover:bg-gray-50 transition-colors py-2.5 px-3 rounded-lg">
+              <Heart size={16} /> Wishlist {wishlistCount > 0 && `(${wishlistCount})`}
+            </Link>
           </div>
         </div>
       </motion.div>

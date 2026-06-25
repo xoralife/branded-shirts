@@ -183,5 +183,88 @@
       "/uploads/upload-1782386934629.png",
       "/uploads/upload-1782386934742.png"
     ]
+  },
+  {
+    "id": 10,
+    "name": "Striped Casual Shirt",
+    "category": "shirts",
+    "price": 2299,
+    "originalPrice": 2999,
+    "image": "/uploads/shirt-3a.jpg",
+    "description": "Trendy striped pattern casual shirt for everyday style",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "badge": "New",
+    "images": [
+      "/uploads/shirt-3a.jpg",
+      "/uploads/shirt-3b.jpg",
+      "/uploads/upload-1782385836750.png"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Linen Summer Shirt",
+    "category": "shirts",
+    "price": 1899,
+    "originalPrice": null,
+    "image": "/uploads/shirt-4a.jpg",
+    "description": "Lightweight breathable linen shirt perfect for summers",
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "badge": null,
+    "images": [
+      "/uploads/shirt-4a.jpg",
+      "/uploads/shirt-4b.jpg"
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Slim Fit Chinos",
+    "category": "trousers",
+    "price": 2799,
+    "originalPrice": 3499,
+    "image": "/uploads/trouser-2a.jpg",
+    "description": "Classic slim fit chino trousers for smart casual look",
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36",
+      "38"
+    ],
+    "badge": "Sale",
+    "images": [
+      "/uploads/trouser-2a.jpg",
+      "/uploads/trouser-2b.jpg",
+      "/uploads/trouser-1a.jpg"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Cotton Joggers",
+    "category": "trousers",
+    "price": 2199,
+    "originalPrice": null,
+    "image": "/uploads/trouser-3a.jpg",
+    "description": "Comfortable cotton joggers for casual and sporty wear",
+    "sizes": [
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "badge": "New",
+    "images": [
+      "/uploads/trouser-3a.jpg",
+      "/uploads/trouser-3b.jpg"
+    ]
   }
 ]
