@@ -5,7 +5,7 @@
     "category": "shirts",
     "price": 2499,
     "originalPrice": 3299,
-    "image": "/shirt1.jpg",
+    "image": "/uploads/upload-1782386934475.png",
     "description": "Premium cotton classic fit shirt in navy blue",
     "sizes": [
       "S",
@@ -15,7 +15,10 @@
       "XXL"
     ],
     "badge": "New",
-    "images": []
+    "images": [
+      "/uploads/upload-1782386934475.png",
+      "/uploads/upload-1782385836750.png"
+    ]
   },
   {
     "id": 2,
@@ -23,7 +26,7 @@
     "category": "shirts",
     "price": 2199,
     "originalPrice": null,
-    "image": "/shirt2.jpg",
+    "image": "/uploads/upload-1782386934629.png",
     "description": "Crisp white formal shirt for professional look",
     "sizes": [
       "S",
@@ -33,7 +36,10 @@
       "XXL"
     ],
     "badge": null,
-    "images": []
+    "images": [
+      "/uploads/upload-1782386934629.png",
+      "/uploads/upload-1782386934742.png"
+    ]
   },
   {
     "id": 3,
@@ -41,7 +47,7 @@
     "category": "shirts",
     "price": 1999,
     "originalPrice": 2599,
-    "image": "/shirt3.jpg",
+    "image": "/uploads/shirt-3a.jpg",
     "description": "Stylish checked pattern casual shirt",
     "sizes": [
       "M",
@@ -49,7 +55,10 @@
       "XL"
     ],
     "badge": "Sale",
-    "images": []
+    "images": [
+      "/uploads/shirt-3a.jpg",
+      "/uploads/shirt-3b.jpg"
+    ]
   },
   {
     "id": 4,
@@ -57,7 +66,7 @@
     "category": "shirts",
     "price": 2799,
     "originalPrice": null,
-    "image": "/shirt4.jpg",
+    "image": "/uploads/shirt-4a.jpg",
     "description": "Sleek black slim fit shirt for evening wear",
     "sizes": [
       "S",
@@ -66,7 +75,10 @@
       "XL"
     ],
     "badge": "New",
-    "images": []
+    "images": [
+      "/uploads/shirt-4a.jpg",
+      "/uploads/shirt-4b.jpg"
+    ]
   },
   {
     "id": 5,
@@ -74,7 +86,7 @@
     "category": "trousers",
     "price": 2999,
     "originalPrice": 3799,
-    "image": "/trouser1.jpg",
+    "image": "/uploads/trouser-1a.jpg",
     "description": "Comfortable navy chino trousers for casual wear",
     "sizes": [
       "30",
@@ -84,7 +96,10 @@
       "38"
     ],
     "badge": "Sale",
-    "images": []
+    "images": [
+      "/uploads/trouser-1a.jpg",
+      "/uploads/trouser-1b.jpg"
+    ]
   },
   {
     "id": 6,
@@ -92,7 +107,7 @@
     "category": "trousers",
     "price": 3299,
     "originalPrice": null,
-    "image": "/trouser2.jpg",
+    "image": "/uploads/trouser-2a.jpg",
     "description": "Sharp black formal trousers for office",
     "sizes": [
       "30",
@@ -102,7 +117,10 @@
       "38"
     ],
     "badge": null,
-    "images": []
+    "images": [
+      "/uploads/trouser-2a.jpg",
+      "/uploads/trouser-2b.jpg"
+    ]
   },
   {
     "id": 7,
@@ -110,7 +128,7 @@
     "category": "trousers",
     "price": 2699,
     "originalPrice": 3299,
-    "image": "/trouser3.jpg",
+    "image": "/uploads/trouser-3a.jpg",
     "description": "Light beige casual trousers for summer",
     "sizes": [
       "30",
@@ -119,7 +137,10 @@
       "36"
     ],
     "badge": "Sale",
-    "images": []
+    "images": [
+      "/uploads/trouser-3a.jpg",
+      "/uploads/trouser-3b.jpg"
+    ]
   },
   {
     "id": 8,
@@ -127,7 +148,7 @@
     "category": "trousers",
     "price": 3499,
     "originalPrice": null,
-    "image": "/trouser4.jpg",
+    "image": "/uploads/trouser-4a.jpg",
     "description": "Modern gray slim fit trousers",
     "sizes": [
       "30",
@@ -137,22 +158,30 @@
       "38"
     ],
     "badge": "New",
-    "images": []
+    "images": [
+      "/uploads/trouser-4a.jpg",
+      "/uploads/trouser-4b.jpg"
+    ]
   },
   {
-    "name": "new",
+    "name": "brand",
     "category": "shirts",
     "price": 1222,
     "originalPrice": 21320,
     "description": "hi there ",
-    "image": "/uploads/upload-1782385836750.png",
+    "image": "/uploads/upload-1782386934475.png",
     "sizes": [
       "M",
       "L",
-      "XL"
+      "XL",
+      "XXL"
     ],
     "badge": null,
     "id": 9,
-    "images": []
+    "images": [
+      "/uploads/upload-1782386934475.png",
+      "/uploads/upload-1782386934629.png",
+      "/uploads/upload-1782386934742.png"
+    ]
   }
 ]
