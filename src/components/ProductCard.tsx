@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import QuickView from "./QuickView";
 
 interface ProductCardProps {
   product: {
@@ -23,6 +24,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, index }: ProductCardProps) {
   const { addItem, setIsOpen } = useCart();
   const [selectedSize, setSelectedSize] = useState(product.sizes[1] || product.sizes[0]);
+  const [quickViewProduct, setQuickViewProduct] = useState<typeof product | null>(null);
 
   const handleAddToCart = () => {
     addItem(product, selectedSize);
@@ -30,6 +32,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   };
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -66,6 +69,12 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
 
+        <button
+          onClick={() => setQuickViewProduct(product)}
+          className="absolute bottom-3 right-16 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gray-100"
+        >
+          <Eye size={18} />
+        </button>
         <button
           onClick={handleAddToCart}
           className="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#1E3A5F] hover:text-white"
@@ -107,6 +116,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           ))}
         </div>
       </div>
-    </motion.div>
+      </motion.div>
+
+      <QuickView product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
+    </>
   );
 }

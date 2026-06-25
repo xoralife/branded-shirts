@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Mail,
   Phone,
@@ -13,15 +14,32 @@ import {
 const footerLinks = [
   {
     title: "Shop",
-    links: ["All Products", "Shirts", "Trousers", "New Arrivals", "Sale"],
+    links: [
+      { label: "All Products", href: "/" },
+      { label: "Shirts", href: "/shirts" },
+      { label: "Trousers", href: "/trousers" },
+      { label: "New Arrivals", href: "/shirts" },
+      { label: "Sale", href: "/trousers" },
+    ],
   },
   {
     title: "Support",
-    links: ["Contact Us", "FAQs", "Shipping Info", "Returns", "Size Guide"],
+    links: [
+      { label: "Contact Us", href: "#contact-form" },
+      { label: "FAQs", href: "#" },
+      { label: "Shipping Info", href: "#" },
+      { label: "Returns", href: "#" },
+      { label: "Size Guide", href: "/size-guide" },
+    ],
   },
   {
     title: "Company",
-    links: ["About Us", "Careers", "Privacy Policy", "Terms of Service"],
+    links: [
+      { label: "About Us", href: "#about" },
+      { label: "Careers", href: "#" },
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Service", href: "#" },
+    ],
   },
 ];
 
@@ -69,13 +87,13 @@ export default function Footer() {
               </h4>
               <ul className="space-y-3">
                 {section.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
                       className="text-sm text-white/50 hover:text-white transition-colors"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

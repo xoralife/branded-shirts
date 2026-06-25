@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ProductCard from "./ProductCard";
+import ProductSkeleton from "./ProductSkeleton";
 import products from "@/data/products.json";
 
 export default function ProductGrid() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered =
     activeCategory === "all"
@@ -50,11 +57,25 @@ export default function ProductGrid() {
           ))}
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {filtered.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
-          ))}
-        </div>
+        <motion.div
+          layout
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+        >
+          {loading
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <ProductSkeleton />
+                </motion.div>
+              ))
+            : filtered.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
+              ))}
+        </motion.div>
       </div>
     </section>
   );

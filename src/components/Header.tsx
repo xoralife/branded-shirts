@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import SearchBar from "./SearchBar";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -46,6 +47,9 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
+            <div className="hidden sm:block">
+              <SearchBar />
+            </div>
             <button
               onClick={() => setCartOpen(true)}
               className="relative p-2 text-gray-600 hover:text-[#1E3A5F] transition-colors"

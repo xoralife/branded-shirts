@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import CategorySection from "@/components/CategorySection";
 import ProductGrid from "@/components/ProductGrid";
 import About from "@/components/About";
+import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
       <CategorySection />
       <ProductGrid />
       <About />
+      <ContactForm />
       <Footer />
     </>
   );
