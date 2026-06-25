@@ -61,7 +61,7 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20 focus:border-[#1E3A5F]"
-              placeholder="admin@brandedstore.com"
+              placeholder="admin@store.com"
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function AdminLogin() {
         </form>
 
         <p className="text-xs text-gray-400 text-center mt-6">
-          Demo: admin@brandedstore.com / admin123
+          Demo: admin@store.com / admin123
         </p>
       </motion.div>
     </div>

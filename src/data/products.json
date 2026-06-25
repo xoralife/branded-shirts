@@ -7,8 +7,14 @@
     "originalPrice": 3299,
     "image": "/shirt1.jpg",
     "description": "Premium cotton classic fit shirt in navy blue",
-    "sizes": ["S", "M", "L", "XL", "XXL"],
-    "badge": "Sale"
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "badge": "New"
   },
   {
     "id": 2,
@@ -18,7 +24,13 @@
     "originalPrice": null,
     "image": "/shirt2.jpg",
     "description": "Crisp white formal shirt for professional look",
-    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
     "badge": null
   },
   {
@@ -29,7 +41,11 @@
     "originalPrice": 2599,
     "image": "/shirt3.jpg",
     "description": "Stylish checked pattern casual shirt",
-    "sizes": ["M", "L", "XL"],
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
     "badge": "Sale"
   },
   {
@@ -40,7 +56,12 @@
     "originalPrice": null,
     "image": "/shirt4.jpg",
     "description": "Sleek black slim fit shirt for evening wear",
-    "sizes": ["S", "M", "L", "XL"],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "badge": "New"
   },
   {
@@ -51,7 +72,13 @@
     "originalPrice": 3799,
     "image": "/trouser1.jpg",
     "description": "Comfortable navy chino trousers for casual wear",
-    "sizes": ["30", "32", "34", "36", "38"],
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36",
+      "38"
+    ],
     "badge": "Sale"
   },
   {
@@ -62,7 +89,13 @@
     "originalPrice": null,
     "image": "/trouser2.jpg",
     "description": "Sharp black formal trousers for office",
-    "sizes": ["30", "32", "34", "36", "38"],
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36",
+      "38"
+    ],
     "badge": null
   },
   {
@@ -73,7 +106,12 @@
     "originalPrice": 3299,
     "image": "/trouser3.jpg",
     "description": "Light beige casual trousers for summer",
-    "sizes": ["30", "32", "34", "36"],
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
     "badge": "Sale"
   },
   {
@@ -84,7 +122,13 @@
     "originalPrice": null,
     "image": "/trouser4.jpg",
     "description": "Modern gray slim fit trousers",
-    "sizes": ["30", "32", "34", "36", "38"],
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36",
+      "38"
+    ],
     "badge": "New"
   }
 ]
