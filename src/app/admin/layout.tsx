@@ -12,6 +12,7 @@ import {
   Package,
 } from "lucide-react";
 import AdminAuthCheck from "@/components/AdminAuthCheck";
+import { ToastProvider } from "@/components/Toast";
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -101,7 +102,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <main className="flex-1 p-4 lg:p-8 overflow-x-hidden">{children}</main>
+          <main className="flex-1 p-4 lg:p-8 overflow-x-hidden">
+            <ToastProvider>{children}</ToastProvider>
+          </main>
         </div>
 
         {sidebarOpen && (
