@@ -85,21 +85,32 @@ export default function ProductDetail() {
             <div className="space-y-3">
               <div className="aspect-[3/4] bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center overflow-hidden relative">
                 {(product.images?.[selectedImage] || product.image)?.startsWith("/upload") ? (
-                  <>
-                    <img src={product.images?.[selectedImage] || product.image} alt={product.name} className="w-full h-full object-cover" />
+                  <div className="w-full h-full relative">
+                    <AnimatePresence mode="wait">
+                      <motion.img
+                        key={selectedImage}
+                        src={product.images?.[selectedImage] || product.image}
+                        alt={product.name}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -50 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="w-full h-full object-cover absolute inset-0"
+                      />
+                    </AnimatePresence>
                     {product.images && product.images.length > 1 && (
                       <>
                         <button onClick={() => setSelectedImage((prev) => (prev - 1 + product.images!.length) % product.images!.length)}
-                          className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow">
+                          className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow z-10">
                           <ChevronLeft size={18} />
                         </button>
                         <button onClick={() => setSelectedImage((prev) => (prev + 1) % product.images!.length)}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow">
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow z-10">
                           <ChevronRight size={18} />
                         </button>
                       </>
                     )}
-                  </>
+                  </div>
                 ) : (
                   <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
                 )}

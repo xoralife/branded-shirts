@@ -64,7 +64,18 @@ export default function QuickView({ product, onClose }: QuickViewProps) {
               <div className="space-y-2">
                 <div className="aspect-[3/4] rounded-xl bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center overflow-hidden relative">
                   {(product.images?.[qvImage] || product.image)?.startsWith("/upload") ? (
-                    <img src={product.images?.[qvImage] || product.image} alt={product.name} className="w-full h-full object-cover" />
+                    <AnimatePresence mode="wait">
+                      <motion.img
+                        key={qvImage}
+                        src={product.images?.[qvImage] || product.image}
+                        alt={product.name}
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -40 }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        className="w-full h-full object-cover absolute inset-0"
+                      />
+                    </AnimatePresence>
                   ) : (
                     <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
                   )}
