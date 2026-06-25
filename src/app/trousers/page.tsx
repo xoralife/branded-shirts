@@ -3,8 +3,7 @@
 import { motion } from "framer-motion";
 import ProductCard from "@/components/ProductCard";
 import products from "@/data/products.json";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export default function TrousersPage() {
   const trousers = products.filter((p) => p.category === "trousers");
@@ -17,12 +16,7 @@ export default function TrousersPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#1E3A5F] transition-colors mb-4"
-          >
-            <ArrowLeft size={16} /> Back to Home
-          </Link>
+          <Breadcrumb items={[{ label: "Trousers" }]} />
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
             Trendy Trousers
           </h1>

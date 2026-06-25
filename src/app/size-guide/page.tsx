@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const shirtSizes = [
   { size: "S", chest: "36-38", waist: "30-32", length: "27" },
@@ -28,12 +27,7 @@ export default function SizeGuidePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#1E3A5F] transition-colors mb-4"
-          >
-            <ArrowLeft size={16} /> Back to Home
-          </Link>
+          <Breadcrumb items={[{ label: "Size Guide" }]} />
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
             Size Guide
           </h1>

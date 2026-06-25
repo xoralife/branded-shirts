@@ -10,6 +10,11 @@ import {
   Menu,
   X,
   Package,
+  Settings,
+  Grid3X3,
+  Users,
+  BarChart3,
+  Image,
 } from "lucide-react";
 import AdminAuthCheck from "@/components/AdminAuthCheck";
 import { ToastProvider } from "@/components/Toast";
@@ -17,7 +22,12 @@ import { ToastProvider } from "@/components/Toast";
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Products", href: "/admin/products", icon: Shirt },
+  { label: "Categories", href: "/admin/categories", icon: Grid3X3 },
   { label: "Orders", href: "/admin/orders", icon: Package },
+  { label: "Customers", href: "/admin/customers", icon: Users },
+  { label: "Sliders", href: "/admin/sliders", icon: Image },
+  { label: "Reports", href: "/admin/reports", icon: BarChart3 },
+  { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

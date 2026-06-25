@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export default function CheckoutPage() {
   const { items, updateQuantity, removeItem, totalPrice, clearCart } =
@@ -38,6 +39,7 @@ export default function CheckoutPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
+          <Breadcrumb items={[{ label: "Checkout" }]} />
           <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
           <p className="text-gray-500 mt-1">Review your order and pay</p>
         </motion.div>
