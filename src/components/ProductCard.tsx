@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 interface ProductCardProps {
   product: {
@@ -19,6 +21,14 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, index }: ProductCardProps) {
+  const { addItem, setIsOpen } = useCart();
+  const [selectedSize, setSelectedSize] = useState(product.sizes[1] || product.sizes[0]);
+
+  const handleAddToCart = () => {
+    addItem(product, selectedSize);
+    setIsOpen(true);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -56,7 +66,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
 
-        <button className="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#1E3A5F] hover:text-white">
+        <button
+          onClick={handleAddToCart}
+          className="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#1E3A5F] hover:text-white"
+        >
           <ShoppingBag size={18} />
         </button>
       </div>
@@ -80,12 +93,17 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </div>
         <div className="flex gap-1 mt-3">
           {product.sizes.map((size) => (
-            <span
+            <button
               key={size}
-              className="text-[10px] px-2 py-1 border border-gray-200 rounded text-gray-500 font-medium"
+              onClick={() => setSelectedSize(size)}
+              className={`text-[10px] px-2 py-1 border rounded font-medium transition-colors ${
+                selectedSize === size
+                  ? "border-[#1E3A5F] bg-[#1E3A5F] text-white"
+                  : "border-gray-200 text-gray-500 hover:border-gray-300"
+              }`}
             >
               {size}
-            </span>
+            </button>
           ))}
         </div>
       </div>

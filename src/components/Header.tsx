@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -14,6 +15,7 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { totalItems, setIsOpen: setCartOpen } = useCart();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
@@ -44,11 +46,16 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-gray-600 hover:text-[#1E3A5F] transition-colors">
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative p-2 text-gray-600 hover:text-[#1E3A5F] transition-colors"
+            >
               <ShoppingBag size={22} />
-              <span className="absolute -top-0.5 -right-0.5 bg-[#1E3A5F] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                0
-              </span>
+              {totalItems > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-[#1E3A5F] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
             </button>
 
             <button
