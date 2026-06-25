@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, ArrowLeft, IndianRupee, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingBag, ArrowLeft, IndianRupee, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import Breadcrumb from "@/components/Breadcrumb";
+import FeedbackList from "@/components/FeedbackList";
+import FeedbackForm from "@/components/FeedbackForm";
 
 interface Product {
   id: number;
@@ -28,6 +30,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedImage, setSelectedImage] = useState(0);
+  const [feedbackKey, setFeedbackKey] = useState(0);
   const { addItem, setIsOpen } = useCart();
 
   useEffect(() => {
@@ -154,6 +157,15 @@ export default function ProductDetail() {
                 </div>
               </div>
             </div>
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+          className="mt-10 bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
+          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-6"><MessageSquare size={20} /> Reviews</h3>
+          <div className="grid md:grid-cols-2 gap-8">
+            <FeedbackList productId={id} refreshKey={feedbackKey} />
+            <FeedbackForm productId={id} onSubmitted={() => setFeedbackKey((k) => k + 1)} />
           </div>
         </motion.div>
       </div>

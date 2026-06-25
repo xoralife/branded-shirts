@@ -15,6 +15,7 @@ import {
   Users,
   BarChart3,
   Image,
+  MessageSquare,
 } from "lucide-react";
 import AdminAuthCheck from "@/components/AdminAuthCheck";
 import { ToastProvider } from "@/components/Toast";
@@ -26,6 +27,7 @@ const navItems = [
   { label: "Orders", href: "/admin/orders", icon: Package },
   { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Sliders", href: "/admin/sliders", icon: Image },
+  { label: "Reviews", href: "/admin/feedback", icon: MessageSquare },
   { label: "Reports", href: "/admin/reports", icon: BarChart3 },
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
