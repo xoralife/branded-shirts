@@ -55,12 +55,16 @@ export default function SearchBar() {
             {results.map((p) => (
               <Link
                 key={p.id}
-                href={p.category === "shirts" ? "/shirts" : "/trousers"}
+                href={`/${p.category}/${p.id}`}
                 onClick={() => { setQuery(""); setIsOpen(false); }}
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-lg">{p.category === "shirts" ? "👔" : "👖"}</span>
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {p.image && (p.image.startsWith("/upload") || p.image.startsWith("/uploads")) ? (
+                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-lg">{p.category === "shirts" ? "👔" : "👖"}</span>
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>

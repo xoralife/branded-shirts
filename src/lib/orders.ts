@@ -50,10 +50,13 @@ export interface Order {
   id: number;
   customer: string;
   email: string;
+  phone?: string;
+  address?: string;
   items: { name: string; qty: number; price: number }[];
   total: number;
   status: string;
   date: string;
+  paymentMethod?: string;
 }
 
 export function getOrders(): Order[] {

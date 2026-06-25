@@ -9,10 +9,13 @@ interface Order {
   id: number;
   customer: string;
   email: string;
+  phone?: string;
+  address?: string;
   items: { name: string; qty: number; price: number }[];
   total: number;
   status: string;
   date: string;
+  paymentMethod?: string;
 }
 
 const statusOptions = ["Processing", "Shipped", "Delivered", "Cancelled"];
@@ -99,6 +102,7 @@ export default function AdminOrders() {
                     <tr className="border-b border-gray-100 bg-gray-50">
                       <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Order ID</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Customer</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Payment</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Items</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Total</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Status</th>
@@ -113,7 +117,15 @@ export default function AdminOrders() {
                           <div>
                             <p className="font-medium text-gray-900 whitespace-nowrap">{order.customer}</p>
                             <p className="text-xs text-gray-400">{order.email}</p>
+                            {order.phone && <p className="text-xs text-gray-400">{order.phone}</p>}
                           </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          {order.paymentMethod ? (
+                            <span className={`px-2 py-0.5 text-xs font-bold rounded-full whitespace-nowrap ${order.paymentMethod === "jazzcash" ? "bg-gray-100 text-gray-700" : "bg-red-50 text-red-600"}`}>
+                              {order.paymentMethod === "jazzcash" ? "JazzCash" : "EasyPaisa"}
+                            </span>
+                          ) : <span className="text-gray-300">-</span>}
                         </td>
                         <td className="py-3 px-4">
                           <div className="space-y-0.5 min-w-[140px]">
@@ -155,8 +167,14 @@ export default function AdminOrders() {
                     <span className="text-xs text-gray-400">{order.date}</span>
                   </div>
                   <p className="font-medium text-gray-900 text-sm">{order.customer}</p>
-                  <p className="text-xs text-gray-400 mb-2">{order.email}</p>
-                  <div className="text-xs text-gray-600 mb-3">
+                  <p className="text-xs text-gray-400">{order.email}</p>
+                  {order.phone && <p className="text-xs text-gray-400">{order.phone}</p>}
+                  {order.paymentMethod && (
+                    <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-bold rounded-full ${order.paymentMethod === "jazzcash" ? "bg-gray-100 text-gray-700" : "bg-red-50 text-red-600"}`}>
+                      {order.paymentMethod === "jazzcash" ? "JazzCash" : "EasyPaisa"}
+                    </span>
+                  )}
+                  <div className="text-xs text-gray-600 mt-2 mb-3">
                     {order.items.map((item, j) => (
                       <p key={j}>{item.name} x{item.qty}</p>
                     ))}

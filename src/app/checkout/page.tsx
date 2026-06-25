@@ -3,18 +3,23 @@
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Minus, Plus, Trash2, X, CheckCircle } from "lucide-react";
+import { Minus, Plus, Trash2, X, CheckCircle, User, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
 export default function CheckoutPage() {
   const { items, updateQuantity, removeItem, totalPrice, clearCart } = useCart();
+  const [customer, setCustomer] = useState({ name: "", email: "", phone: "", address: "" });
   const [paying, setPaying] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"jazzcash" | "easypaisa" | null>(null);
   const [paymentNumber, setPaymentNumber] = useState("");
   const [paid, setPaid] = useState(false);
 
   const handlePay = async (method: "jazzcash" | "easypaisa") => {
+    if (!customer.name || !customer.email || !customer.phone || !customer.address) {
+      alert("Please fill in all customer details before proceeding");
+      return;
+    }
     setPaying(true);
     setPaymentMethod(method);
 
@@ -27,8 +32,10 @@ export default function CheckoutPage() {
 
   const confirmPayment = async () => {
     const order = {
-      customer: "Guest",
-      email: "guest@example.com",
+      customer: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      address: customer.address,
       items: items.map((i) => ({
         name: i.name,
         qty: i.quantity,
@@ -57,7 +64,8 @@ export default function CheckoutPage() {
             <CheckCircle size={32} className="text-green-600" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Placed!</h2>
-          <p className="text-gray-500 mb-6">Thank you for your purchase. We'll process your order soon.</p>
+          <p className="text-gray-500 mb-2">Thank you for your purchase, {customer.name}.</p>
+          <p className="text-gray-400 text-sm mb-6">We'll process your order soon and contact you at {customer.phone}.</p>
           <Link href="/" className="inline-flex px-6 py-3 bg-[#1E3A5F] text-white font-semibold rounded-xl hover:bg-[#162D4A] transition-colors">
             Continue Shopping
           </Link>
@@ -91,6 +99,45 @@ export default function CheckoutPage() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
+              className="bg-white rounded-xl p-5 border border-gray-100 space-y-4">
+              <h3 className="font-bold text-gray-900 flex items-center gap-2"><User size={18} /> Customer Details</h3>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Full Name *</label>
+                  <div className="relative">
+                    <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="text" required value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" placeholder="John Doe" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Email *</label>
+                  <div className="relative">
+                    <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="email" required value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" placeholder="john@example.com" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Phone *</label>
+                  <div className="relative">
+                    <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="tel" required value={customer.phone} onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" placeholder="03XX-XXXXXXX" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Address *</label>
+                  <div className="relative">
+                    <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="text" required value={customer.address} onChange={(e) => setCustomer({ ...customer, address: e.target.value })}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" placeholder="House #, Street, City" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
             {items.map((item) => (
               <motion.div key={`${item.id}-${item.selectedSize}`} layout
                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
