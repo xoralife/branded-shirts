@@ -105,86 +105,103 @@ export default function AdminProducts() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white rounded-xl border border-gray-100 overflow-hidden"
       >
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Product</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Category</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Price</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Badge</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="py-12 text-center text-gray-400">
-                    No products found
-                  </td>
-                </tr>
-              ) : (
-                filtered.map((p, i) => (
-                  <motion.tr
-                    key={p.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.02 }}
-                    className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-sm flex-shrink-0">
-                          {p.category === "shirts" ? "👔" : "👖"}
-                        </div>
-                        <span className="font-medium text-gray-900 whitespace-nowrap">{p.name}</span>
+        {filtered.length === 0 ? (
+          <div className="text-center py-12 text-gray-400 bg-white rounded-xl border border-gray-100">
+            No products found
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table */}
+            <div className="hidden sm:block bg-white rounded-xl border border-gray-100 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-100 bg-gray-50">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Product</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Category</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Price</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Badge</th>
+                      <th className="text-right py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((p, i) => (
+                      <motion.tr
+                        key={p.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: i * 0.02 }}
+                        className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-sm flex-shrink-0">
+                              {p.category === "shirts" ? "👔" : "👖"}
+                            </div>
+                            <span className="font-medium text-gray-900 whitespace-nowrap">{p.name}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="capitalize text-gray-600 whitespace-nowrap">{p.category}</span>
+                        </td>
+                        <td className="py-3 px-4 font-semibold text-[#1E3A5F] whitespace-nowrap">
+                          Rs.{p.price.toLocaleString()}
+                        </td>
+                        <td className="py-3 px-4">
+                          {p.badge ? (
+                            <span className={`px-2 py-0.5 text-xs font-bold rounded-full whitespace-nowrap ${p.badge === "New" ? "bg-[#1E3A5F] text-white" : "bg-red-100 text-red-600"}`}>{p.badge}</span>
+                          ) : (<span className="text-gray-300">-</span>)}
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center justify-end gap-2">
+                            <button onClick={() => router.push(`/admin/products/${p.id}/edit`)} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#1E3A5F] transition-colors"><Pencil size={16} /></button>
+                            <button onClick={() => handleDelete(p.id)} className="p-2 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600 transition-colors"><Trash2 size={16} /></button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="sm:hidden space-y-3">
+              {filtered.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="bg-white rounded-xl border border-gray-100 p-4"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-lg">
+                        {p.category === "shirts" ? "👔" : "👖"}
                       </div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className="capitalize text-gray-600 whitespace-nowrap">{p.category}</span>
-                    </td>
-                    <td className="py-3 px-4 font-semibold text-[#1E3A5F] whitespace-nowrap">
-                      Rs.{p.price.toLocaleString()}
-                    </td>
-                    <td className="py-3 px-4">
-                      {p.badge ? (
-                        <span
-                          className={`px-2 py-0.5 text-xs font-bold rounded-full whitespace-nowrap ${
-                            p.badge === "New"
-                              ? "bg-[#1E3A5F] text-white"
-                              : "bg-red-100 text-red-600"
-                          }`}
-                        >
-                          {p.badge}
-                        </span>
-                      ) : (
-                        <span className="text-gray-300">-</span>
-                      )}
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => router.push(`/admin/products/${p.id}/edit`)}
-                          className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#1E3A5F] transition-colors"
-                        >
-                          <Pencil size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(p.id)}
-                          className="p-2 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600 transition-colors"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm">{p.name}</p>
+                        <p className="text-xs text-gray-400 capitalize">{p.category}</p>
                       </div>
-                    </td>
-                  </motion.tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                    <div className="flex gap-1">
+                      <button onClick={() => router.push(`/admin/products/${p.id}/edit`)} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500"><Pencil size={15} /></button>
+                      <button onClick={() => handleDelete(p.id)} className="p-2 rounded-lg hover:bg-red-50 text-gray-500"><Trash2 size={15} /></button>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[#1E3A5F]">Rs.{p.price.toLocaleString()}</span>
+                    {p.badge ? (
+                      <span className={`px-2 py-0.5 text-xs font-bold rounded-full ${p.badge === "New" ? "bg-[#1E3A5F] text-white" : "bg-red-100 text-red-600"}`}>{p.badge}</span>
+                    ) : null}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </>
+        )}
       </motion.div>
     </div>
   );

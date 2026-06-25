@@ -86,81 +86,96 @@ export default function AdminOrders() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white rounded-xl border border-gray-100 overflow-hidden"
       >
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Order ID</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Customer</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Items</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Total</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Status</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-gray-400">
-                    No orders found
-                  </td>
-                </tr>
-              ) : (
-                filtered.map((order, i) => (
-                  <motion.tr
-                    key={order.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.03 }}
-                    className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="py-3 px-4 font-medium text-gray-900 whitespace-nowrap">
-                      #{order.id}
-                    </td>
-                    <td className="py-3 px-4">
-                      <div>
-                        <p className="font-medium text-gray-900 whitespace-nowrap">
-                          {order.customer}
-                        </p>
-                        <p className="text-xs text-gray-400">{order.email}</p>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="space-y-0.5 min-w-[140px]">
-                        {order.items.map((item, j) => (
-                          <p key={j} className="text-xs text-gray-600 whitespace-nowrap">
-                            {item.name} x{item.qty}
-                          </p>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 font-semibold text-[#1E3A5F] whitespace-nowrap">
-                      Rs.{order.total.toLocaleString()}
-                    </td>
-                    <td className="py-3 px-4">
-                      <select
-                        value={order.status}
-                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                        className={`px-2.5 py-1 text-xs font-bold rounded-full border-0 cursor-pointer outline-none ${
-                          statusColors[order.status] || "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {statusOptions.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="py-3 px-4 text-gray-500 whitespace-nowrap">{order.date}</td>
-                  </motion.tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        {filtered.length === 0 ? (
+          <div className="text-center py-12 text-gray-400 bg-white rounded-xl border border-gray-100">No orders found</div>
+        ) : (
+          <>
+            {/* Desktop Table */}
+            <div className="hidden sm:block bg-white rounded-xl border border-gray-100 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-100 bg-gray-50">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Order ID</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Customer</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Items</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Total</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Status</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((order, i) => (
+                      <motion.tr key={order.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.03 }} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                        <td className="py-3 px-4 font-medium text-gray-900 whitespace-nowrap">#{order.id}</td>
+                        <td className="py-3 px-4">
+                          <div>
+                            <p className="font-medium text-gray-900 whitespace-nowrap">{order.customer}</p>
+                            <p className="text-xs text-gray-400">{order.email}</p>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="space-y-0.5 min-w-[140px]">
+                            {order.items.map((item, j) => (
+                              <p key={j} className="text-xs text-gray-600 whitespace-nowrap">{item.name} x{item.qty}</p>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 font-semibold text-[#1E3A5F] whitespace-nowrap">Rs.{order.total.toLocaleString()}</td>
+                        <td className="py-3 px-4">
+                          <select
+                            value={order.status}
+                            onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                            className={`px-2.5 py-1 text-xs font-bold rounded-full border-0 cursor-pointer outline-none ${statusColors[order.status] || "bg-gray-100 text-gray-600"}`}
+                          >
+                            {statusOptions.map((s) => (<option key={s} value={s}>{s}</option>))}
+                          </select>
+                        </td>
+                        <td className="py-3 px-4 text-gray-500 whitespace-nowrap">{order.date}</td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="sm:hidden space-y-3">
+              {filtered.map((order, i) => (
+                <motion.div
+                  key={order.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="bg-white rounded-xl border border-gray-100 p-4"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold text-gray-900">#{order.id}</span>
+                    <span className="text-xs text-gray-400">{order.date}</span>
+                  </div>
+                  <p className="font-medium text-gray-900 text-sm">{order.customer}</p>
+                  <p className="text-xs text-gray-400 mb-2">{order.email}</p>
+                  <div className="text-xs text-gray-600 mb-3">
+                    {order.items.map((item, j) => (
+                      <p key={j}>{item.name} x{item.qty}</p>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[#1E3A5F]">Rs.{order.total.toLocaleString()}</span>
+                    <select
+                      value={order.status}
+                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                      className={`px-2.5 py-1 text-xs font-bold rounded-full border-0 cursor-pointer outline-none ${statusColors[order.status] || "bg-gray-100 text-gray-600"}`}
+                    >
+                      {statusOptions.map((s) => (<option key={s} value={s}>{s}</option>))}
+                    </select>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </>
+        )}
       </motion.div>
     </div>
   );

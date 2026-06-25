@@ -44,7 +44,7 @@ export default function Hero() {
   }, [next]);
 
   return (
-    <section className="relative h-[85vh] min-h-[500px] max-h-[800px] overflow-hidden">
+    <section className="relative h-[70vh] sm:h-[80vh] lg:h-[85vh] min-h-[420px] sm:min-h-[500px] max-h-[800px] overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           key={current}

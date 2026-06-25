@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import SearchBar from "./SearchBar";
@@ -16,6 +18,7 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
   const { totalItems, setIsOpen: setCartOpen } = useCart();
 
   return (
@@ -35,15 +38,20 @@ export default function Header() {
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-sm font-medium text-gray-600 hover:text-[#1E3A5F] transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    isActive ? "text-[#1E3A5F]" : "text-gray-600 hover:text-[#1E3A5F]"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-4">
@@ -72,22 +80,29 @@ export default function Header() {
         </div>
       </div>
 
-      {isOpen && (
-        <div className="lg:hidden border-t border-gray-100 bg-white">
-          <div className="px-4 py-4 space-y-3">
+      <motion.div
+        initial={false}
+        animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+        className="lg:hidden overflow-hidden border-t border-gray-100 bg-white"
+      >
+        <div className="px-4 py-4 space-y-4">
+          <div className="sm:hidden">
+            <SearchBar />
+          </div>
+          <div className="space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="block text-sm font-medium text-gray-600 hover:text-[#1E3A5F] transition-colors py-2"
+                className="block text-sm font-medium text-gray-600 hover:text-[#1E3A5F] hover:bg-gray-50 transition-colors py-2.5 px-3 rounded-lg"
               >
                 {link.label}
               </Link>
             ))}
           </div>
         </div>
-      )}
+      </motion.div>
     </header>
   );
 }
