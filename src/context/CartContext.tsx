@@ -15,6 +15,7 @@ interface Product {
   price: number;
   originalPrice: number | null;
   image: string;
+  images?: string[];
   description: string;
   sizes: string[];
   badge: string | null;

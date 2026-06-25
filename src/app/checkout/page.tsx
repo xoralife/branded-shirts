@@ -143,8 +143,8 @@ export default function CheckoutPage() {
                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
                 className="bg-white rounded-xl p-4 flex gap-4 border border-gray-100">
                 <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  {item.image && (item.image.startsWith("/upload") || item.image.startsWith("/uploads")) ? (
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  {(item.images?.[0] || item.image)?.startsWith("/upload") ? (
+                    <img src={item.images?.[0] || item.image} alt={item.name} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-3xl">{item.category === "shirts" ? "👔" : "👖"}</span>
                   )}

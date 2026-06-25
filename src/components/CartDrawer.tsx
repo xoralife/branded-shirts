@@ -70,8 +70,8 @@ export default function CartDrawer() {
                       className="flex gap-4 bg-gray-50 rounded-xl p-3"
                     >
                       <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        {item.image && (item.image.startsWith("/upload") || item.image.startsWith("/uploads")) ? (
-                          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        {(item.images?.[0] || item.image)?.startsWith("/upload") ? (
+                          <img src={item.images?.[0] || item.image} alt={item.name} className="w-full h-full object-cover" />
                         ) : (
                           <span className="text-2xl">{item.category === "shirts" ? "👔" : "👖"}</span>
                         )}

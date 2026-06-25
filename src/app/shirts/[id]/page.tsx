@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
-import { ShoppingBag, ArrowLeft, IndianRupee } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShoppingBag, ArrowLeft, IndianRupee, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -15,6 +15,7 @@ interface Product {
   price: number;
   originalPrice: number | null;
   image: string;
+  images?: string[];
   description: string;
   sizes: string[];
   badge: string | null;
@@ -26,6 +27,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("");
+  const [selectedImage, setSelectedImage] = useState(0);
   const { addItem, setIsOpen } = useCart();
 
   useEffect(() => {
@@ -77,11 +79,37 @@ export default function ProductDetail() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl border border-gray-100 overflow-hidden mt-6">
           <div className="grid md:grid-cols-2 gap-0">
-            <div className="aspect-[3/4] bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
-              {product.image && (product.image.startsWith("/upload") || product.image.startsWith("/uploads")) ? (
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
+            <div className="space-y-3">
+              <div className="aspect-[3/4] bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center overflow-hidden relative">
+                {(product.images?.[selectedImage] || product.image)?.startsWith("/upload") ? (
+                  <>
+                    <img src={product.images?.[selectedImage] || product.image} alt={product.name} className="w-full h-full object-cover" />
+                    {product.images && product.images.length > 1 && (
+                      <>
+                        <button onClick={() => setSelectedImage((prev) => (prev - 1 + product.images!.length) % product.images!.length)}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow">
+                          <ChevronLeft size={18} />
+                        </button>
+                        <button onClick={() => setSelectedImage((prev) => (prev + 1) % product.images!.length)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow">
+                          <ChevronRight size={18} />
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
+                )}
+              </div>
+              {product.images && product.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {product.images.map((img, i) => (
+                    <button key={i} onClick={() => setSelectedImage(i)}
+                      className={`w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${selectedImage === i ? "border-[#1E3A5F]" : "border-gray-200 hover:border-gray-300"}`}>
+                      <img src={img} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
               )}
             </div>
 

@@ -12,6 +12,7 @@ interface Product {
   price: number;
   originalPrice: number | null;
   image: string;
+  images?: string[];
   description: string;
   sizes: string[];
   badge: string | null;
@@ -25,6 +26,7 @@ interface QuickViewProps {
 export default function QuickView({ product, onClose }: QuickViewProps) {
   const { addItem, setIsOpen } = useCart();
   const [selectedSize, setSelectedSize] = useState(product?.sizes[1] || product?.sizes[0] || "");
+  const [qvImage, setQvImage] = useState(0);
 
   if (!product) return null;
 
@@ -59,11 +61,23 @@ export default function QuickView({ product, onClose }: QuickViewProps) {
             </button>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              <div className="aspect-[3/4] rounded-xl bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
-                {product.image && (product.image.startsWith("/upload") || product.image.startsWith("/uploads")) ? (
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
+              <div className="space-y-2">
+                <div className="aspect-[3/4] rounded-xl bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100 flex items-center justify-center overflow-hidden relative">
+                  {(product.images?.[qvImage] || product.image)?.startsWith("/upload") ? (
+                    <img src={product.images?.[qvImage] || product.image} alt={product.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-8xl">{product.category === "shirts" ? "👔" : "👖"}</span>
+                  )}
+                </div>
+                {product.images && product.images.length > 1 && (
+                  <div className="flex gap-2 overflow-x-auto">
+                    {product.images.map((img, i) => (
+                      <button key={i} onClick={() => setQvImage(i)}
+                        className={`w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${qvImage === i ? "border-[#1E3A5F]" : "border-gray-200 hover:border-gray-300"}`}>
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
 

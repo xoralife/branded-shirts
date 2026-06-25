@@ -3,7 +3,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import Link from "next/link";
-import products from "@/data/products.json";
+import rawProducts from "@/data/products.json";
+
+interface SearchProduct {
+  id: number; name: string; category: string; price: number; originalPrice: number | null;
+  image: string; images?: string[]; description: string; sizes: string[]; badge: string | null;
+}
+
+const products = rawProducts as SearchProduct[];
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -60,8 +67,8 @@ export default function SearchBar() {
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  {p.image && (p.image.startsWith("/upload") || p.image.startsWith("/uploads")) ? (
-                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                  {(p.images?.[0] || p.image)?.startsWith("/upload") ? (
+                    <img src={p.images?.[0] || p.image} alt={p.name} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-lg">{p.category === "shirts" ? "👔" : "👖"}</span>
                   )}

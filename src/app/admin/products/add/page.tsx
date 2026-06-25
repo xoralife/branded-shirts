@@ -20,7 +20,7 @@ export default function AddProduct() {
     description: "",
     sizes: ["M", "L", "XL"],
     badge: "",
-    image: null as string | null,
+    images: [] as string[],
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -36,24 +36,27 @@ export default function AddProduct() {
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      showToast("Please select an image file", "error");
-      return;
-    }
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
     setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: formData });
-    const data = await res.json();
-    if (res.ok) {
-      setForm({ ...form, image: data.url });
-      showToast("Image uploaded", "success");
-    } else {
-      showToast("Upload failed", "error");
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith("image/")) {
+        showToast(`${file.name} is not an image`, "error");
+        continue;
+      }
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (res.ok) {
+        setForm((prev) => ({ ...prev, images: [...prev.images, data.url] }));
+      } else {
+        showToast(`Failed to upload ${file.name}`, "error");
+      }
     }
     setUploading(false);
+    showToast("Images uploaded", "success");
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,7 +69,8 @@ export default function AddProduct() {
       price: Number(form.price),
       originalPrice: form.originalPrice ? Number(form.originalPrice) : null,
       description: form.description,
-      image: form.image || `/${form.category === "shirts" ? "shirt" : "trouser"}${Date.now()}.jpg`,
+      image: form.images[0] || `/${form.category === "shirts" ? "shirt" : "trouser"}${Date.now()}.jpg`,
+      images: form.images.length > 0 ? form.images : undefined,
       sizes: form.sizes,
       badge: form.badge || null,
     };
@@ -135,24 +139,27 @@ export default function AddProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
-          {form.image ? (
-            <div className="relative w-full h-48 rounded-xl overflow-hidden border border-gray-200 mb-3">
-              <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
-              <button type="button" onClick={() => setForm({ ...form, image: null })}
-                className="absolute top-2 right-2 w-8 h-8 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors">
-                <X size={16} />
-              </button>
-            </div>
-          ) : (
-            <div onClick={() => fileInputRef.current?.click()}
-              className="w-full h-32 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#1E3A5F]/40 hover:bg-gray-50 transition-colors">
-              <Upload size={24} className="text-gray-300 mb-2" />
-              <p className="text-sm text-gray-400">Click to upload product image</p>
-              <p className="text-xs text-gray-300 mt-1">PNG, JPG, WebP (max 5MB)</p>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Product Images (max 5)</label>
+          {form.images.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {form.images.map((img, i) => (
+                <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-gray-200">
+                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <button type="button" onClick={() => setForm({ ...form, images: form.images.filter((_, j) => j !== i) })}
+                    className="absolute top-1 right-1 w-5 h-5 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 text-xs">
+                    <X size={12} />
+                  </button>
+                </div>
+              ))}
             </div>
           )}
-          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
+          <div onClick={() => fileInputRef.current?.click()}
+            className="w-full h-32 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#1E3A5F]/40 hover:bg-gray-50 transition-colors">
+            <Upload size={24} className="text-gray-300 mb-2" />
+            <p className="text-sm text-gray-400">Click to upload product images</p>
+            <p className="text-xs text-gray-300 mt-1">PNG, JPG, WebP (max 5MB each, select multiple)</p>
+          </div>
+          <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" disabled={uploading} />
           {uploading && <p className="text-xs text-[#1E3A5F] mt-2">Uploading...</p>}
         </div>
 

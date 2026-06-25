@@ -14,6 +14,7 @@ interface ProductCardProps {
     price: number;
     originalPrice: number | null;
     image: string;
+    images?: string[];
     description: string;
     sizes: string[];
     badge: string | null;
@@ -42,8 +43,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     >
       <div className="relative aspect-[4/5] bg-gray-100 overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center">
-          {product.image && (product.image.startsWith("/upload") || product.image.startsWith("/uploads")) ? (
-            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          {(product.images?.[0] || product.image)?.startsWith("/upload") ? (
+            <img src={product.images?.[0] || product.image} alt={product.name} className="w-full h-full object-cover" />
           ) : (
             <div
               className={`w-full h-full flex items-center justify-center ${
