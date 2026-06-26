@@ -6,6 +6,7 @@ import FAQ from "@/components/FAQ";
 import About from "@/components/About";
 import Newsletter from "@/components/Newsletter";
 import ContactForm from "@/components/ContactForm";
+import SiteFeedback from "@/components/SiteFeedback";
 import BackToTop from "@/components/BackToTop";
 import Footer from "@/components/Footer";
 
@@ -20,6 +21,7 @@ export default function Home() {
       <About />
       <Newsletter />
       <ContactForm />
+      <SiteFeedback />
       <Footer />
       <BackToTop />
     </>
